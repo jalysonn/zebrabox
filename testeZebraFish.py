@@ -1,6 +1,7 @@
 import numpy as np
 import cv2
-
+import argparse
+import imutils
 
 
 def get_output_layers(net):
@@ -121,6 +122,7 @@ while(cap.isOpened()):
 # go through the detections remaining
 # after nms and draw bounding box
 		for i in indices:
+			
 			i = i[0]
 			box = boxes[i]
 			x = box[0]
@@ -135,13 +137,18 @@ while(cap.isOpened()):
 			gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			ret,thresh = cv2.threshold(gray_image,127,255,0)
 
-#			M = cv2.moments(i)
-			cX = 0
-			cY = 0
-			cX = float(round(x["m10"])) / round(x["m00"])
-			cY = float(round(y["m01"])) / round(y["m00"])
-			cv2.circle(frame, (cX, cY), 5, (255, 255, 255), -1)
-			cv2.putText(frame, "centroid", (cX - 25, cY - 25),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+			M = cv2.moments(frame)
+			try:
+				cX = int(M["m10"] / M["m00"])
+				cY = int(M["m01"] / M["m00"])
+			except ZeroDivisionError:
+				cX=0
+				cY=0
+
+			cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
+			cv2.putText(image, "center", (cX - 20, cY - 20),
+			cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
 			#v2.imshow('frame',frame)
 			cv2.imshow('frame',frame)
 #			cv2.imshow('frame', round(x))
