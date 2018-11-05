@@ -35,16 +35,16 @@ while(cap.isOpened()):
 		
 	verde = (0, 255, 0)
 ####### QUADRANTES #######
-#canvas((x2,anguloHorario) , (x1,anguloAntiHorario)),cor, espessuraBorda)
-	# cv2.line(frame, (1900,200), (0, 200), verde, 4)
-	# cv2.line(frame, (1900, 540), (0, 540), verde, 4)
-	# cv2.line(frame, (1900, 900), (0, 900), verde, 4)
+	#canvas((x2,anguloHorario) , (x1,anguloAntiHorario),cor, espessuraBorda)
+# 	cv2.line(frame, (1900,200), (0, 200), verde, 4)
+# 	cv2.line(frame, (1900, 540), (0, 540), verde, 4)
+# 	cv2.line(frame, (1900, 900), (0, 900), verde, 4)
 
-#LINHA VERTICAL
-#canvas((anguloHorario,y1) , (anguloAntiHorario,y2),cor, espessuraBorda)
-	# cv2.line(frame, (700, 50), (700,1900), verde, 4)
-	# cv2.line(frame, (1060, 50), (1060,1900), verde, 4)
-	# cv2.line(frame, (1400, 50), (1450,1900), verde, 4)
+# #LINHA VERTICAL
+# #	canvas((anguloHorario,y1) , (anguloAntiHorario,y2),cor, espessuraBorda)
+# 	cv2.line(frame, (700, 50), (700,1900), verde, 4)
+# 	cv2.line(frame, (1060, 50), (1060,1900), verde, 4)
+# 	cv2.line(frame, (1400, 50), (1450,1900), verde, 4)
 	
 
 	gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
@@ -137,7 +137,8 @@ while(cap.isOpened()):
 			gray_image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 			ret,thresh = cv2.threshold(gray_image,127,255,0)
 
-			M = cv2.moments(frame)
+			cnt = frame[0]
+			M = cv2.moments(cnt)
 			try:
 				cX = int(M["m10"] / M["m00"])
 				cY = int(M["m01"] / M["m00"])
@@ -145,18 +146,25 @@ while(cap.isOpened()):
 				cX=0
 				cY=0
 
-			cv2.circle(image, (cX, cY), 7, (255, 255, 255), -1)
-			cv2.putText(image, "center", (cX - 20, cY - 20),
+			
+			cv2.drawContours(frame, [cnt], -1, (0, 255, 0), 2)
+			cv2.circle(frame, (cX, cY), 7, (255, 255, 255), -1)
+			cv2.putText(frame, "center", (cX - 20, cY - 20),
 			cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
+
+
+			# cv2.circle(frame, (cX, cY), 7, (255, 255, 255), -1)
+			# cv2.putText(frame, "center", (cX - 20, cY - 20),
+			# cv2.FONT_HERSHEY_SIMPLEX, 0.5, (255, 255, 255), 2)
 
 			#v2.imshow('frame',frame)
 			cv2.imshow('frame',frame)
 #			cv2.imshow('frame', round(x))
 
-#			font = cv2.FONT_HERSHEY_SIMPLEX
-#			text =str(i)
-#			cv2.putText(frame,"ob{}".format(text),(class_ids[i].centerPositions[-1][-2],blobs[i].centerPositions[-1][-1]),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255 ,0), 2) 
-#			cv2.putText(round(x),'opencv',(10,500), font , 1,(0,0,255),2,cv2.LINE_AA)
+			# font = cv2.FONT_HERSHEY_SIMPLEX
+			# text =str(i)
+			# cv2.putText(frame,"ob{}".format(text),(class_ids[i].centerPositions[-1][-2],blobs[i].centerPositions[-1][-1]),cv2.FONT_HERSHEY_SIMPLEX, 0.5, (0,255 ,0), 2) 
+			# cv2.putText(round(x),'opencv',(10,500), font , 1,(0,0,255),2,cv2.LINE_AA)
 			
 			if cv2.waitKey(1) & 0xFF == ord('q'):
 				break
